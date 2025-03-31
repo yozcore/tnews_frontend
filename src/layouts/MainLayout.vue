@@ -28,9 +28,9 @@
           <q-btn
             class="text-weight-bolder"
             style="top: 35px"
-            v-bind:label="[
-              $q.dark.isActive ? 'ダークモード:ON' : 'ダークモード:OFF',
-            ]"
+            v-bind:label="
+              $q.dark.isActive ? 'ダークモード:ON' : 'ダークモード:OFF'
+            "
             dense
             flat
             no-caps
@@ -123,7 +123,7 @@ import { LocalStorage, useQuasar } from 'quasar';
 
 const $q = useQuasar();
 const dark = LocalStorage.getItem('is_dark');
-$q.dark.set(dark);
+$q.dark.set(dark as boolean);
 
 const userStore = useUserStore();
 const leftDrawerOpen = ref(false);
