@@ -1,7 +1,7 @@
 <template>
-  <q-page class="row justify-start">
+  <q-page class="row justify-center">
     <div
-      class="col-12 col-md-7 col-lg-6"
+      class="col-12 col-md-6 col-lg-5"
       :class="[$q.screen.lt.md ? 'q-px-sm' : 'q-px-xl q-mx-lg']"
     >
       <div v-if="fetching">
@@ -10,11 +10,11 @@
         </div>
       </div>
       <div v-else>
-        <div class="text-h4 q-py-xl">{{ data.getThread.title }}</div>
+        <div class="text-h4 q-py-xl">{{ thread.title }}</div>
         <div class="text-grey q-pb-md">
-          {{ data.getThread.createdAt }} {{ data.getThread.user.username }}
+          {{ thread.createdAt }} {{ thread.user.username }}
         </div>
-        <div v-html="data.getThread.body" class="text-body1"></div>
+        <div v-html="thread.body" class="text-body1"></div>
       </div>
     </div>
     <div class="col-2">
@@ -22,7 +22,7 @@
       <div v-else class="q-py-xl">
         <div style="text-align: center" class="justify-center row">
           <q-img
-            :src="data.getThread.user.avatarImage.url"
+            :src="thread.user.avatar_image"
             class="imagehover"
             style="
               width: 50px;
@@ -33,9 +33,9 @@
           >
           </q-img>
         </div>
-        <div style="text-align: center">{{ data.getThread.user.username }}</div>
+        <div style="text-align: center">{{ thread.user.username }}</div>
         <div style="text-align: center" class="text-gley">
-          {{ data.getThread.user.biography }}
+          {{ thread.user.biography }}
         </div>
       </div>
     </div>
@@ -43,20 +43,23 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@urql/vue';
-import { GET_THREAD } from '../graphql/queries';
 import { useRoute } from 'vue-router';
+import { onMounted, computed } from 'vue';
+import { useThreadStore } from 'stores/thread';
 
 const route = useRoute();
-defineOptions({
-  name: 'ThreadDetail',
+const threadId = route.params.id as string;
+console.log('スレッドID:', threadId);
+const store = useThreadStore();
+const fetching = computed(() => store.getFetching);
+const thread = computed(() => store.thread);
+const fetchThread = () => store.fetchThread(threadId);
+
+onMounted(() => {
+  fetchThread();
 });
 
-const { data, fetching, error, executeQuery } = useQuery({
-  query: GET_THREAD,
-  variables: {
-    id: route.params.id,
-  },
-  requestPolicy: 'cache-and-network',
+defineOptions({
+  name: 'ThreadDetail',
 });
 </script>

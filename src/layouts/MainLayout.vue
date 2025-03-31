@@ -1,9 +1,15 @@
 <template>
   <q-layout
-    view="lHh Lpr lff"
+    view="hHh lpR fFf"
     v-bind:class="[$q.dark.isActive ? 'bg-dark' : 'bg-grey-1']"
   >
-    <q-header class="bg-grey-1 text-black q-mx-lg">
+    <q-header
+      class="q-px-lg"
+      elevated
+      v-bind:class="[
+        $q.dark.isActive ? 'bg-dark text-white' : 'bg-white text-black',
+      ]"
+    >
       <q-toolbar>
         <q-toolbar-title style="width: 300px">
           <q-item
@@ -14,10 +20,24 @@
             style="padding: 3px"
           >
             <q-item-section>
-              <span class="text-weight-bold"></span>
+              <span class="text-weight-bold">Tech News</span>
             </q-item-section>
           </q-item>
         </q-toolbar-title>
+        <div>
+          <q-btn
+            class="text-weight-bolder"
+            style="top: 35px"
+            v-bind:label="[
+              $q.dark.isActive ? 'ダークモード:ON' : 'ダークモード:OFF',
+            ]"
+            dense
+            flat
+            no-caps
+            size="11px"
+            @click="changeTheme()"
+          />
+        </div>
 
         <q-btn icon="las la-plus-circle" flat dense class="q-mx-xs">
           <q-tooltip> 投稿 </q-tooltip>
@@ -40,7 +60,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer
+    <!--  <q-drawer
       show-if-above
       v-model="leftDrawerOpen"
       side="left"
@@ -50,21 +70,6 @@
     >
       <q-scroll-area class="fit">
         <q-list padding>
-          <q-item
-            clickable
-            tag="a"
-            target="_blank"
-            @click="$router.push('/')"
-            style="padding: 3px"
-          >
-            <q-item-section>
-              <q-item-label header
-                ><span class="text-weight-bold text-black"
-                  >Eureka Today</span
-                ></q-item-label
-              >
-            </q-item-section>
-          </q-item>
           <q-item clickable dense>
             <q-item-section avatar>
               <q-icon color="grey" name="las la-home" />
@@ -103,7 +108,7 @@
           </q-item>
         </q-list>
       </q-scroll-area>
-    </q-drawer>
+    </q-drawer> -->
 
     <q-page-container>
       <router-view />
@@ -114,11 +119,26 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useUserStore } from 'src/stores/user';
+import { LocalStorage, useQuasar } from 'quasar';
+
+const $q = useQuasar();
+const dark = LocalStorage.getItem('is_dark');
+$q.dark.set(dark);
 
 const userStore = useUserStore();
-const leftDrawerOpen = ref(true);
+const leftDrawerOpen = ref(false);
 const isLoggedIn = computed(() => userStore.is_logged_in);
 const avatarImage = computed(() => userStore.profile?.avatar_image);
+
+function changeTheme() {
+  if ($q.dark.isActive) {
+    $q.dark.set(false);
+    LocalStorage.set('is_dark', false);
+  } else {
+    $q.dark.set(true);
+    LocalStorage.set('is_dark', true);
+  }
+}
 
 defineOptions({
   name: 'MainLayout',

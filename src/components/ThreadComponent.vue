@@ -116,12 +116,12 @@
 
         <q-item-section
           side
-          v-if="thread.thumbnailImage"
+          v-if="thread.thumbnail_image"
           @click="$emit('trigger')"
         >
           <div style="overflow: hidden; width: 100%; height: 100%">
             <q-img
-              :src="thread.thumbnailImage.url"
+              :src="thread.thumbnail_image"
               class="imagehover"
               style="
                 width: 130px;

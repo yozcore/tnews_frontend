@@ -150,9 +150,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import axios from 'axios';
 import { useQuasar } from 'quasar';
 import { useUserStore } from 'src/stores/user';
+import { API_URLS } from '../const';
+import axios from 'axios';
+
 const userStore = useUserStore();
 const $q = useQuasar();
 const editorRef = ref<any>(null);
@@ -227,20 +229,19 @@ function insertPicture() {
 }
 
 async function createThread() {
-  const modifiedString = body.value.replace(/"/g, "'");
+  const modifiedBody = body.value.replace(/"/g, "'");
+  const modifiedTitle = title.value.replace(/"/g, "'");
   try {
     const response = await axios.post(
-      process.env.API_URL + '/graphql/',
+      API_URLS.THREADS,
       {
-        query: `
-        mutation {
-          createThread(data: { title: \"${title.value}\", body: \"${modifiedString}\", communityId: \"\", contentType:0 }) { id title }
-        }
-      `,
+        body: modifiedBody,
+        title: modifiedTitle,
       },
       {
         headers: {
-          Authorization: 'Bearer ' + userStore.access_token,
+          Authorization:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjg2NDY0LCJpYXQiOjE3NDMwODE2NjQsImp0aSI6ImMxZDkzNDkyYTcyODQ5NmQ5YWJhMDk4Yzk2NzBjZjcxIiwidXNlcl9pZCI6IjQzMTZkMzM4LTU4MTYtNDY4Zi05ZTBiLTMxOGZiYmQxMzAzNyJ9.U_sb6GgrUf0CUvBeVTHlczeWZAvrQJhtiU80lZgiQAM',
         },
       }
     );
