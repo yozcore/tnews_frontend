@@ -240,8 +240,7 @@ async function createThread() {
       },
       {
         headers: {
-          Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzNjg2NDY0LCJpYXQiOjE3NDMwODE2NjQsImp0aSI6ImMxZDkzNDkyYTcyODQ5NmQ5YWJhMDk4Yzk2NzBjZjcxIiwidXNlcl9pZCI6IjQzMTZkMzM4LTU4MTYtNDY4Zi05ZTBiLTMxOGZiYmQxMzAzNyJ9.U_sb6GgrUf0CUvBeVTHlczeWZAvrQJhtiU80lZgiQAM',
+          Authorization: 'Bearer ' + userStore.access_token,
         },
       }
     );
