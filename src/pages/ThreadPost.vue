@@ -175,7 +175,7 @@ function insertPicture() {
   input.accept = '.png, .jpg, jpeg, .gif'; // file extensions allowed
   let file;
   input.onchange = function () {
-    const files = Array.from(input.files);
+    const files = Array.from(input.files as FileList);
     file = files[0];
     if (file.size > 1024 * 1024 * 5) {
       $q.notify({
