@@ -5,8 +5,7 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     access_token: '',
     refresh_token: '',
-    token_type: '',
-    scope: '',
+
     is_logged_in: false,
     profile: { avatar_image: '' },
   }),
@@ -21,12 +20,7 @@ export const useUserStore = defineStore('user', {
     setRefreshToken(token: string) {
       this.refresh_token = token;
     },
-    setTokenType(token: string) {
-      this.token_type = token;
-    },
-    setScope(scope: string) {
-      this.scope = scope;
-    },
+
     setIsLoggedIn(isLoggedIn: boolean) {
       this.is_logged_in = isLoggedIn;
     },
