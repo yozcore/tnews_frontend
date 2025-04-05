@@ -2,10 +2,14 @@ import { defineStore } from 'pinia';
 import { Thread } from '../models';
 import { API_URLS } from '../const';
 import axios from 'axios';
+import { title } from 'process';
 
 export const useThreadStore = defineStore('thread', {
   state: () => ({
-    thread: {},
+    thread: {
+      body: '',
+      title: '',
+    },
     fetching: true,
   }),
   persist: false,
