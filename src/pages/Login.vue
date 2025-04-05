@@ -14,13 +14,13 @@
         <q-form bordered @submit="login">
           <q-input
             filled
-            v-model="email"
-            label="メールアドレス"
+            v-model="username"
+            label="ユーザー名"
             lazy-rules
             dense
             :rules="[
               (val) =>
-                (val && val.length > 0) || 'メールアドレスを入力してください',
+                (val && val.length > 0) || 'ユーザー名を入力してください',
             ]"
           />
 
@@ -48,7 +48,7 @@
         <div class="text-primary q-py-sm">パスワードをお忘れの場合</div>
       </div>
 
-      <div class="row no-wrap justify-start items-center q-py-lg">
+      <!-- <div class="row no-wrap justify-start items-center q-py-lg">
         <q-separator class="col q-ml-lg" />
         <small class="col-grow">または</small>
         <q-separator inset class="col" />
@@ -92,7 +92,7 @@
             dense
           />
         </q-form>
-      </div>
+      </div> -->
     </div>
   </q-page>
 </template>
@@ -104,16 +104,15 @@ import { useUserStore } from 'src/stores/user';
 
 const userStore = useUserStore();
 
-const email = ref('');
+const username = ref('');
 const password = ref('');
 const password2 = ref('');
 async function login() {
   const formData = new FormData();
   const clientId = process.env.CLIENT_ID;
 
-  formData.append('grant_type', 'password');
   formData.append('client_id', clientId ? clientId : '');
-  formData.append('username', email.value);
+  formData.append('username', username.value);
   formData.append('password', password.value);
 
   const config = {
@@ -122,27 +121,26 @@ async function login() {
     },
   };
   const response = await axios.post(
-    process.env.API_URL + '/oauth/token/',
+    process.env.API_URL + '/auth/login/',
     formData,
     config
   );
-  if (response.data.access_token) {
-    userStore.setAccessToken(response.data.access_token);
-    userStore.setRefreshToken(response.data.refresh_token);
-    userStore.setTokenType(response.data.token_type);
-    userStore.setScope(response.data.scope);
+  if (response.data.access) {
+    userStore.setAccessToken(response.data.access);
+    userStore.setRefreshToken(response.data.refresh);
     userStore.setIsLoggedIn(true);
-    const user = await axios.get(process.env.API_URL + '/accounts/profile/', {
+    const user = await axios.get(process.env.API_URL + '0.1/me/account/', {
       headers: {
-        Authorization: 'Bearer ' + response.data.access_token,
+        Authorization: response.data.access,
       },
     });
     if (user.data) {
       console.log(user.data);
       userStore.setProfile(user.data);
     }
+  } else {
+    console.log('no token retured');
   }
-  console.log(response.data);
 }
 defineOptions({
   name: 'authLogin',
