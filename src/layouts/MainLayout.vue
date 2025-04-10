@@ -47,12 +47,14 @@
           <q-tooltip> 通知 </q-tooltip>
           <small class="q-px-xs">通知</small>
         </q-btn>
-        <div v-if="isLoggedIn">
+        <div v-if="isLoggedIn" class="row">
           <q-img
             :src="avatarImage"
             style="height: 30px; width: 30px; border-radius: 50%"
             class="q-mx-xs"
           />
+          <br />
+          <div>{{ userName }}</div>
         </div>
         <q-btn flat to="/auth/login" class="text-weight-bolder" v-else>
           ログイン
@@ -117,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 import { useUserStore } from 'src/stores/user';
 import { LocalStorage, useQuasar } from 'quasar';
 
@@ -126,9 +128,10 @@ const dark = LocalStorage.getItem('is_dark');
 $q.dark.set(dark as boolean);
 
 const userStore = useUserStore();
-const leftDrawerOpen = ref(false);
 const isLoggedIn = computed(() => userStore.is_logged_in);
 const avatarImage = computed(() => userStore.profile?.avatar_image);
+const userName = computed(() => userStore.profile?.username);
+const fetchUserInfo = () => userStore.fetchUserInfo();
 
 function changeTheme() {
   if ($q.dark.isActive) {
@@ -139,6 +142,10 @@ function changeTheme() {
     LocalStorage.set('is_dark', true);
   }
 }
+
+onMounted(() => {
+  fetchUserInfo();
+});
 
 defineOptions({
   name: 'MainLayout',

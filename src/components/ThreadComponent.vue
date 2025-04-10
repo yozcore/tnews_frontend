@@ -43,9 +43,9 @@
                     $emit('trigger');
                     $router.push('/thread/' + thread.id);
                   "
-                  >{{ thread.commentCount }}コメント</a
+                  >{{ thread.comment_count }}コメント</a
                 >
-                &nbsp;{{ thread.timeSinceCreated }}&nbsp;
+                &nbsp;{{ thread.humanized_created_at }}&nbsp;
               </small>
               <div>
                 <q-btn

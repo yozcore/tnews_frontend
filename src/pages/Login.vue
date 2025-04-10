@@ -101,7 +101,9 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useUserStore } from 'src/stores/user';
+import { useQuasar } from 'quasar';
 
+const $q = useQuasar();
 const userStore = useUserStore();
 
 const username = ref('');
@@ -125,7 +127,9 @@ async function login() {
     formData,
     config
   );
+
   if (response.data.access) {
+    $q.notify('ログインしました。');
     userStore.setAccessToken(response.data.access);
     userStore.setRefreshToken(response.data.refresh);
     userStore.setIsLoggedIn(true);

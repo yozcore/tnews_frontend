@@ -8,4 +8,5 @@ export const API_URLS = {
   USERS: `${API_BASE_URL}/users/`,
   THREADS: `${API_BASE_URL}/threads/`,
   COMMENTS: `${API_BASE_URL}/comments/`,
+  ME: `${API_BASE_URL}/me/`,
 };
