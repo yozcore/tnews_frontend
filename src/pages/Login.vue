@@ -102,6 +102,8 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useUserStore } from 'src/stores/user';
 import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const $q = useQuasar();
 const userStore = useUserStore();
@@ -142,7 +144,9 @@ async function login() {
       console.log(user.data);
       userStore.setProfile(user.data);
     }
+    router.push('/');
   } else {
+    $q.notify('ログインできませんでした。');
     console.log('no token retured');
   }
 }

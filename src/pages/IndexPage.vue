@@ -4,7 +4,7 @@
       class="col-12 col-md-6 col-lg-5"
       :class="[$q.screen.lt.md ? 'q-px-sm' : 'q-px-xl q-mx-lg']"
     >
-      <q-form
+      <!-- <q-form
         @click="
           $emit('trigger');
           $router.push('/post/');
@@ -18,7 +18,38 @@
           lazy-rules
           :rules="[(val) => (val && val.length > 0) || '投稿する']"
         />
-      </q-form>
+      </q-form> -->
+      <div class="q-mt-lg">
+        <a
+          class="text-primary text-weight-bold"
+          style="margin-right: 25px; position: relative"
+          >注目度
+          <span
+            style="
+              position: absolute;
+              width: 60%;
+              height: 1.5px;
+              background-color: currentColor;
+              bottom: -4px;
+              left: 50%;
+              transform: translateX(-50%);
+            "
+          ></span
+        ></a>
+        <a class="text-decoration-underline" style="position: relative"
+          >更新順<span
+            style="
+              position: absolute;
+              top: -4px;
+              right: -10px;
+              width: 7px;
+              height: 7px;
+              background-color: #3cb371;
+              border-radius: 50%;
+            "
+          ></span
+        ></a>
+      </div>
 
       <div v-if="fetching">
         <div class="row justify-center">

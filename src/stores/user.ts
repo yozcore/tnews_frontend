@@ -42,5 +42,22 @@ export const useUserStore = defineStore('user', {
       this.profile = response.data;
       this.fetching = false;
     },
+
+    async logout() {
+      this.fetching = true;
+      await axios.post(
+        API_URLS.LOGOUT,
+        {},
+        {
+          headers: {
+            Authorization: 'Bearer ' + this.access_token,
+          },
+        }
+      );
+      this.access_token = '';
+      this.refresh_token = '';
+      this.is_logged_in = false;
+      this.fetching = false;
+    },
   },
 });
