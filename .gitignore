@@ -35,3 +35,17 @@ yarn-error.log*
 
 # local .env files
 .env.local*
+
+# Media files
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.mp3
+*.wav
+*.flac
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
