@@ -16,36 +16,6 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/IndexPage.vue'),
       },
       {
-        path: '/meme',
-        name: 'meme',
-        component: () => import('pages/IndexPage.vue'),
-      },
-      {
-        path: '/event',
-        name: 'event',
-        component: () => import('pages/IndexPage.vue'),
-      },
-      {
-        path: '/question',
-        name: 'question',
-        component: () => import('pages/IndexPage.vue'),
-      },
-      {
-        path: '/today_i_learned',
-        name: 'today_i_learned',
-        component: () => import('pages/IndexPage.vue'),
-      },
-      {
-        path: '/off_topic',
-        name: 'off_topic',
-        component: () => import('pages/IndexPage.vue'),
-      },
-      {
-        path: '/product',
-        name: 'product',
-        component: () => import('pages/IndexPage.vue'),
-      },
-      {
         path: 'post/',
         name: 'post',
         component: () => import('pages/ThreadPost.vue'),
