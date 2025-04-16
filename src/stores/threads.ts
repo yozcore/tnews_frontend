@@ -18,9 +18,11 @@ export const useThreadsStore = defineStore('threads', {
   },
 
   actions: {
-    async fetchThreads() {
+    async fetchThreads(sort = '', order = '') {
       this.fetching = true;
-      const response = await axios.get(API_URLS.THREADS);
+      const response = await axios.get(
+        API_URLS.THREADS + `?sort=${sort}&order=${order}`
+      );
       this.threads = response.data.results;
       this.count = response.data.count;
       this.next = response.data.next;

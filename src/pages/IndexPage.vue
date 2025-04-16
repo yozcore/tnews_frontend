@@ -20,35 +20,39 @@
         />
       </q-form> -->
       <div class="q-mt-lg">
-        <a
-          class="text-primary text-weight-bold"
-          style="margin-right: 25px; position: relative"
+        <router-link
+          to="/"
+          :class="{
+            'text-primary': route.path === '/',
+            'text-weight-bold': route.path === '/',
+            'text-black': route.path !== '/' && !$q.dark.isActive,
+            'text-white': route.path !== '/' && $q.dark.isActive,
+          }"
+          style="margin-right: 25px; position: relative; text-decoration: none"
           >注目度
+
           <span
-            style="
-              position: absolute;
-              width: 60%;
-              height: 1.5px;
-              background-color: currentColor;
-              bottom: -4px;
-              left: 50%;
-              transform: translateX(-50%);
-            "
+            :class="{
+              selectedTabUnderline: route.path === '/',
+            }"
           ></span
-        ></a>
-        <a class="text-decoration-underline" style="position: relative"
+        ></router-link>
+        <router-link
+          to="/update"
+          :class="{
+            'text-primary': route.path === '/update',
+            'text-weight-bold': route.path === '/update',
+            'text-black': route.path !== '/update' && !$q.dark.isActive,
+            'text-white': route.path !== '/update' && $q.dark.isActive,
+          }"
+          style="position: relative; text-decoration: none"
           >更新順<span
-            style="
-              position: absolute;
-              top: -4px;
-              right: -10px;
-              width: 7px;
-              height: 7px;
-              background-color: #3cb371;
-              border-radius: 50%;
-            "
-          ></span
-        ></a>
+            :class="{
+              selectedTabUnderline: route.path === '/update',
+            }"
+          ></span>
+          <span class="badge-dot"></span
+        ></router-link>
       </div>
 
       <div v-if="fetching">
@@ -96,17 +100,16 @@ import { useThreadsStore } from 'stores/threads';
 import { storeToRefs } from 'pinia';
 
 const router = useRouter();
-
 const store = useThreadsStore();
-const route = computed(() => useRoute());
+const route = useRoute();
+const route_name = computed(() => route.name as unknown as string);
 const fetching = computed(() => store.getFetching);
 const threads = computed(() => store.threads);
-const fetchThreads = () => store.fetchThreads();
+const fetchThreads = (sort = '', order = '') => store.fetchThreads(sort, order);
 
 const text = ref('');
 
 onMounted(() => {
-  // onMounted フック内の処理
   fetchThreads();
 });
 
@@ -117,6 +120,18 @@ const scrollTop = () => {
 function refetchData() {
   fetchThreads();
 }
+
+watch(
+  () => route.fullPath, // パス or パラメータ or クエリに応じて調整
+  () => {
+    if (route.name === 'top') {
+      fetchThreads();
+    } else if (route.name === 'update') {
+      fetchThreads('updated_at', 'desc');
+    }
+  },
+  { immediate: true }
+);
 
 defineOptions({
   name: 'IndexPage',

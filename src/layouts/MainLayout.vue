@@ -11,13 +11,13 @@
       ]"
     >
       <q-toolbar>
-        <q-toolbar-title style="width: 300px">
+        <q-toolbar-title style="">
           <q-item
             clickable
             tag="a"
             target="_blank"
             @click="$router.push('/')"
-            style="padding: 3px"
+            style="padding: 3px; width: 110px"
           >
             <q-item-section>
               <span class="text-weight-bold">Tech News</span>

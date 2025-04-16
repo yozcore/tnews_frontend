@@ -42,3 +42,23 @@
     color: #b0c4de;
   }
 }
+
+.selectedTabUnderline {
+  position: absolute;
+  width: 60%;
+  height: 1.5px;
+  background-color: currentColor;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.badge-dot {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 8px;
+  height: 8px;
+  background: rgb(22, 165, 98);
+  border-radius: 50%;
+}
