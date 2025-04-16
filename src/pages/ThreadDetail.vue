@@ -75,7 +75,6 @@ import { useThreadStore } from 'stores/thread';
 
 const route = useRoute();
 const threadId = route.params.id as string;
-console.log('スレッドID:', threadId);
 const store = useThreadStore();
 const fetching = computed(() => store.getFetching);
 const commentFetching = computed(() => store.getCommentFetching);

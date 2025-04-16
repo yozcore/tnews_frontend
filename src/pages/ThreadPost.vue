@@ -201,15 +201,12 @@ function insertPicture() {
             },
           })
           .then((response) => {
-            console.log(response.data);
-            console.log('Editor reference:', edit);
             body.value =
               body.value +
               "<br /><div style='text-align: center;'><img src='" +
               response.data.image +
               "' style='width:100%' /></div><br />";
 
-            console.log('after');
             //images.push(response.data.image);
             //setThumbnail(response.data.image);
           })
@@ -244,8 +241,6 @@ async function createThread() {
         },
       }
     );
-
-    console.log(response.data);
   } catch (error) {
     console.error(error);
   }

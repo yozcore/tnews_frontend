@@ -32,13 +32,13 @@ export const useUserStore = defineStore('user', {
 
     async fetchUserInfo() {
       this.fetching = true;
-      console.log(this.access_token);
+
       const response = await axios.get(API_URLS.ME + 'account/', {
         headers: {
           Authorization: 'Bearer ' + this.access_token,
         },
       });
-      console.log(response);
+
       this.profile = response.data;
       this.fetching = false;
     },

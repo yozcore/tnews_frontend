@@ -141,13 +141,11 @@ async function login() {
       },
     });
     if (user.data) {
-      console.log(user.data);
       userStore.setProfile(user.data);
     }
     router.push('/');
   } else {
     $q.notify('ログインできませんでした。');
-    console.log('no token retured');
   }
 }
 defineOptions({
