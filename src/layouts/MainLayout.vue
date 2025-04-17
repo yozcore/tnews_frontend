@@ -39,7 +39,13 @@
           />
         </div>
 
-        <q-btn icon="las la-plus-circle" flat dense class="q-mx-xs">
+        <q-btn
+          icon="las la-plus-circle"
+          flat
+          dense
+          class="q-mx-xs"
+          @click="$router.push('/post')"
+        >
           <q-tooltip> 投稿 </q-tooltip>
           <small class="q-px-xs">投稿</small>
         </q-btn>
