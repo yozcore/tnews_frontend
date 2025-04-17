@@ -51,7 +51,7 @@
               selectedTabUnderline: route.path === '/update',
             }"
           ></span>
-          <span class="badge-dot"></span
+          <span class="badge-dot" v-if="updated_threads_is_unread"></span
         ></router-link>
       </div>
 
@@ -97,16 +97,21 @@ import ThreadComponent from 'components/ThreadComponent.vue';
 import { pipe, subscribe } from 'wonka';
 import { client } from '../boot/urql';
 import { useThreadsStore } from 'stores/threads';
+import { useUserStore } from 'stores/user';
 import { storeToRefs } from 'pinia';
 
 const router = useRouter();
 const store = useThreadsStore();
+const user_store = useUserStore();
 const route = useRoute();
-const route_name = computed(() => route.name as unknown as string);
 const fetching = computed(() => store.getFetching);
 const threads = computed(() => store.threads);
+const updated_threads_is_unread = computed(
+  () => user_store.updated_threads_is_unread
+);
 const fetchThreads = (sort = '', order = '') => store.fetchThreads(sort, order);
-
+const setUpdatedThreadsIsUnread = (value: boolean) =>
+  user_store.setUpdatedThreadsIsUnread(value);
 const text = ref('');
 
 onMounted(() => {
@@ -117,18 +122,24 @@ const scrollTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
+const reloadThreads = () => {
+  if (route.name === 'top') {
+    fetchThreads();
+    setUpdatedThreadsIsUnread(true);
+  } else if (route.name === 'update') {
+    fetchThreads('updated_at', 'desc');
+    setUpdatedThreadsIsUnread(false);
+  }
+};
+
 function refetchData() {
-  fetchThreads();
+  reloadThreads();
 }
 
 watch(
   () => route.fullPath, // パス or パラメータ or クエリに応じて調整
   () => {
-    if (route.name === 'top') {
-      fetchThreads();
-    } else if (route.name === 'update') {
-      fetchThreads('updated_at', 'desc');
-    }
+    reloadThreads();
   },
   { immediate: true }
 );

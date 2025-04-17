@@ -10,6 +10,7 @@ export const useUserStore = defineStore('user', {
     fetching: true,
     is_logged_in: false,
     profile: { avatar_image: '', username: '' },
+    updated_threads_is_unread: true,
   }),
   persist: true,
 
@@ -25,6 +26,9 @@ export const useUserStore = defineStore('user', {
 
     setIsLoggedIn(isLoggedIn: boolean) {
       this.is_logged_in = isLoggedIn;
+    },
+    setUpdatedThreadsIsUnread(isUnread: boolean) {
+      this.updated_threads_is_unread = isUnread;
     },
     setProfile(profile: User) {
       this.profile = profile;
