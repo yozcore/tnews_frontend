@@ -4,21 +4,6 @@
       class="col-12 col-md-6 col-lg-5"
       :class="[$q.screen.lt.md ? 'q-px-sm' : 'q-px-xl q-mx-lg']"
     >
-      <!-- <q-form
-        @click="
-          $emit('trigger');
-          $router.push('/post/');
-        "
-        class="q-gutter-md q-mt-md"
-      >
-        <q-input
-          filled
-          v-model="text"
-          label="投稿する"
-          lazy-rules
-          :rules="[(val) => (val && val.length > 0) || '投稿する']"
-        />
-      </q-form> -->
       <div class="q-mt-lg">
         <router-link
           to="/"
