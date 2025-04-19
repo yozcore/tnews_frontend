@@ -10,6 +10,7 @@ export const useThreadStore = defineStore('thread', {
       body: '',
       title: '',
       created_at: '',
+      humanized_created_at: '',
       user: {
         id: '',
         username: '',
@@ -30,6 +31,7 @@ export const useThreadStore = defineStore('thread', {
       {
         id: '',
         body: '',
+        humanized_created_at: '',
         user: {
           id: '',
           username: '',
@@ -60,6 +62,23 @@ export const useThreadStore = defineStore('thread', {
         API_URLS.COMMENTS + `?thread=${thread_id}`
       );
       this.comments = response.data.results;
+      this.comment_fetching = false;
+    },
+    async postComment(thread_id: string, body: string, access_token: string) {
+      this.comment_fetching = true;
+      const response = await axios.post(
+        API_URLS.COMMENTS,
+        {
+          thread: thread_id,
+          body: body,
+        },
+        {
+          headers: {
+            Authorization: 'Bearer ' + access_token,
+          },
+        }
+      );
+      this.comments.push(response.data);
       this.comment_fetching = false;
     },
   },
