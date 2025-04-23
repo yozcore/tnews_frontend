@@ -3,6 +3,7 @@ import { Thread } from '../models';
 import { API_URLS } from '../const';
 import axios from 'axios';
 import { title } from 'process';
+import { useQuasar } from 'quasar';
 
 export const useThreadStore = defineStore('thread', {
   state: () => ({
@@ -78,8 +79,10 @@ export const useThreadStore = defineStore('thread', {
           },
         }
       );
+
       this.comments.push(response.data);
       this.comment_fetching = false;
+      return response;
     },
   },
 });
