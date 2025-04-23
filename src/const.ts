@@ -7,6 +7,7 @@ const version = 'v0.1';
 export const API_URLS = {
   LOGIN: `${API_BASE_URL}/${version}/login/`,
   LOGOUT: `${API_BASE_URL}/auth/logout/`,
+  REFRESH_TOKEN: `${API_BASE_URL}/auth/token/refresh/`,
   USERS: `${API_BASE_URL}/${version}/users/`,
   THREADS: `${API_BASE_URL}/${version}/threads/`,
   COMMENTS: `${API_BASE_URL}/${version}/comments/`,
