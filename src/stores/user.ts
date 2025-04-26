@@ -47,6 +47,36 @@ export const useUserStore = defineStore('user', {
       this.fetching = false;
     },
 
+    async login(username: string, password: string) {
+      this.fetching = true;
+      const response = await axios.post(API_URLS.LOGIN, {
+        username: username,
+        password: password,
+      });
+      this.access_token = response.data.access;
+      this.refresh_token = response.data.refresh;
+      this.is_logged_in = true;
+      this.fetching = false;
+      await this.fetchUserInfo();
+    },
+    async refreshToken() {
+      this.fetching = true;
+      const response = await axios.post(
+        API_URLS.REFRESH_TOKEN,
+        {
+          refresh: this.refresh_token,
+        },
+        {
+          headers: {},
+        }
+      );
+      this.access_token = response.data.access;
+      this.refresh_token = response.data.refresh;
+      this.is_logged_in = true;
+      this.fetching = false;
+      await this.fetchUserInfo();
+    },
+
     async logout() {
       this.fetching = true;
       await axios.post(
