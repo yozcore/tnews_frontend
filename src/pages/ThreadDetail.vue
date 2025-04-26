@@ -113,7 +113,7 @@
         </div>
       </div>
       <q-separator class="q-my-md" />
-      <div class="q-mb-md">コメント</div>
+      <div class="text-weight-bold">コメント</div>
       <q-input
         v-model="comment"
         outlined
@@ -132,15 +132,15 @@
       </div>
       <div v-else>
         <div class="q-mt-md" style="width: 250px">
+          <div class="text-weight-bold">ユーザー名</div>
           <q-input outlined v-model="username" lazy-rules dense />
-
+          <div class="q-mt-sm text-weight-bold">パスワード</div>
           <q-input
             outlined
             type="password"
             v-model="password"
             lazy-rules
             dense
-            class="q-my-md"
           />
         </div>
 
@@ -152,6 +152,7 @@
         />
       </div>
 
+      <div class="q-my-xl"></div>
       <div class="q-my-xl"></div>
     </div>
     <div class="col-2">

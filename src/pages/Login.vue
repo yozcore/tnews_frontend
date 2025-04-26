@@ -13,28 +13,21 @@
         </div>
         <q-form bordered @submit="login">
           <q-input
-            filled
+            outlined
             v-model="username"
             label="ユーザー名"
             lazy-rules
             dense
-            :rules="[
-              (val) =>
-                (val && val.length > 0) || 'ユーザー名を入力してください',
-            ]"
           />
 
           <q-input
-            filled
+            outlined
             type="password"
             v-model="password"
             label="パスワード"
             lazy-rules
             dense
-            :rules="[
-              (val) =>
-                (val && val.length > 0) || 'パスワードを入力してください',
-            ]"
+            class="q-py-md"
           />
           <q-btn
             color="primary"
@@ -111,6 +104,7 @@ const userStore = useUserStore();
 const username = ref('');
 const password = ref('');
 const password2 = ref('');
+
 async function login() {
   const formData = new FormData();
   const clientId = process.env.CLIENT_ID;

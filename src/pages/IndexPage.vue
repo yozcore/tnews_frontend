@@ -36,8 +36,7 @@
               selectedTabUnderline: route.path === '/update',
             }"
           ></span>
-          <span class="badge-dot" v-if="updated_threads_is_unread"></span
-        ></router-link>
+        </router-link>
       </div>
 
       <div v-if="fetching">
