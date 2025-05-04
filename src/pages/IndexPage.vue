@@ -74,12 +74,8 @@
 import { onMounted, ref, watch } from 'vue';
 import { Todo, Meta } from 'src/models';
 import { computed } from 'vue';
-import { useQuery, Client, cacheExchange, fetchExchange } from '@urql/vue';
-import { OperationContext } from '@urql/vue';
 import { useRouter, useRoute } from 'vue-router';
 import ThreadComponent from 'components/ThreadComponent.vue';
-import { pipe, subscribe } from 'wonka';
-import { client } from '../boot/urql';
 import { useThreadsStore } from 'stores/threads';
 import { useUserStore } from 'stores/user';
 import { storeToRefs } from 'pinia';
