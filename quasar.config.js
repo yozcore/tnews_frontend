@@ -55,7 +55,7 @@ module.exports = configure(function (/* ctx */) {
       // analyze: true,
       env: {
         // You have to manually define all the variables you want to pass in
-        API_URL: 'http://192.168.11.9:8000',
+        API_URL: 'http://192.168.11.41:8000',
         CLIENT_ID: 'GFD94fsZrCUzXAhedt4T0m9lO9JQPd3IhIe5RJip',
         // ...
       },
