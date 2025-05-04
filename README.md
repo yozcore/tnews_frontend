@@ -2,15 +2,19 @@
 
 A Quasar Project
 
-## Install the dependencies
+## パッケージインストール
 
 ```bash
-yarn
-# or
-npm install
+yarn install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### quasar のインストール
+
+node,yarn,quasar
+
+yarn の PATH 通すのを忘れずに
+
+###　開発環境の起動
 
 ```bash
 quasar dev
