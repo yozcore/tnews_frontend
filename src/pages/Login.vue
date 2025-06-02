@@ -6,7 +6,7 @@
     >
       <div
         style="border-color: grey; border: solid 0.5px grey; border-radius: 5px"
-        class="q-pa-md bg-white"
+        class="q-pa-md"
       >
         <div class="column items-center">
           <div class="text-h6 q-py-sm">ログイン</div>
@@ -125,13 +125,19 @@ async function login() {
   );
 
   if (response.data.access) {
-    $q.notify('ログインしました。');
+    $q.notify({
+      message: 'ログインしました',
+      color: 'green',
+      position: 'bottom',
+      timeout: 2000,
+    });
     userStore.setAccessToken(response.data.access);
     userStore.setRefreshToken(response.data.refresh);
     userStore.setIsLoggedIn(true);
-    const user = await axios.get(process.env.API_URL + '0.1/me/account/', {
+
+    const user = await axios.get(process.env.API_URL + '/v0.1/me/account/', {
       headers: {
-        Authorization: response.data.access,
+        Authorization: 'Bearer ' + response.data.access,
       },
     });
     if (user.data) {

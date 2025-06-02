@@ -1,8 +1,8 @@
 <template>
-  <q-page class="row justify-center">
+  <q-page class="row justify-start">
     <div
-      class="col-12 col-md-6 col-lg-5"
-      :class="[$q.screen.lt.md ? 'q-px-sm' : 'q-px-xl q-mx-lg']"
+      class="col-12 col-md-7 col-lg-6"
+      :class="[$q.screen.lt.md ? 'q-px-lg' : 'q-px-xl q-mx-lg']"
     >
       <div class="q-mt-lg">
         <router-link
@@ -13,27 +13,10 @@
             'text-black': route.path !== '/' && !$q.dark.isActive,
             'text-white': route.path !== '/' && $q.dark.isActive,
           }"
-          style="margin-right: 25px; position: relative; text-decoration: none"
-          >注目度
-
-          <span
+          style="position: relative; text-decoration: none"
+          >トレンド<span
             :class="{
               selectedTabUnderline: route.path === '/',
-            }"
-          ></span
-        ></router-link>
-        <router-link
-          to="/update"
-          :class="{
-            'text-primary': route.path === '/update',
-            'text-weight-bold': route.path === '/update',
-            'text-black': route.path !== '/update' && !$q.dark.isActive,
-            'text-white': route.path !== '/update' && $q.dark.isActive,
-          }"
-          style="position: relative; text-decoration: none"
-          >更新順<span
-            :class="{
-              selectedTabUnderline: route.path === '/update',
             }"
           ></span>
         </router-link>
@@ -46,10 +29,13 @@
       </div>
 
       <div v-else>
-        <div v-if="threads">
+        <div v-if="threads && threads.length > 0">
           <div v-cloak v-for="(thread, index) in threads" v-bind:key="index">
             <ThreadComponent :thread="thread" />
           </div>
+        </div>
+        <div v-else>
+          <div class="row justify-center q-pa-md">投稿がありませんでした。</div>
         </div>
       </div>
     </div>
@@ -86,13 +72,9 @@ const user_store = useUserStore();
 const route = useRoute();
 const fetching = computed(() => store.getFetching);
 const threads = computed(() => store.threads);
-const updated_threads_is_unread = computed(
-  () => user_store.updated_threads_is_unread
-);
-const fetchThreads = (sort = '', order = '') => store.fetchThreads(sort, order);
-const setUpdatedThreadsIsUnread = (value: boolean) =>
-  user_store.setUpdatedThreadsIsUnread(value);
-const text = ref('');
+
+const fetchThreads = (sort = '', order = '', community = '', user = '') =>
+  store.fetchThreads(sort, order, community, user);
 
 onMounted(() => {
   fetchThreads();
@@ -105,10 +87,21 @@ const scrollTop = () => {
 const reloadThreads = () => {
   if (route.name === 'top') {
     fetchThreads();
-    setUpdatedThreadsIsUnread(true);
   } else if (route.name === 'update') {
     fetchThreads('updated_at', 'desc');
-    setUpdatedThreadsIsUnread(false);
+  } else if (route.name === 'community') {
+    fetchThreads(
+      'updated_at',
+      'desc',
+      typeof route.params.slug === 'string' ? route.params.slug : ''
+    );
+  } else if (route.name === 'user') {
+    fetchThreads(
+      'updated_at',
+      'desk',
+      '',
+      typeof route.params.username == 'string' ? route.params.username : ''
+    );
   }
 };
 

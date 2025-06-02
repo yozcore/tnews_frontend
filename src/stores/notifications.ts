@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
-import { Thread } from '../models';
 import { API_URLS } from '../const';
+import { useUserStore } from './user';
 import axios from 'axios';
 
-export const useThreadsStore = defineStore('threads', {
+export const useNotificationsStore = defineStore('notifications', {
   state: () => ({
-    threads: [{}] as Thread[],
+    notifications: [{}],
     count: 0,
     next: null,
     previous: null,
@@ -18,20 +18,20 @@ export const useThreadsStore = defineStore('threads', {
   },
 
   actions: {
-    async fetchThreads(sort = '', order = '', community = '', user = '') {
+    async fetchNotifications() {
       this.fetching = true;
-      const response = await axios.get(
-        API_URLS.THREADS +
-          `?sort=${sort}&order=${order}&community=${community}&user=${user}`
-      );
-      this.threads = response.data.results;
+      const userStore = useUserStore();
+      const access_token = userStore.access_token;
+      const response = await axios.get(API_URLS.ME + 'notifications', {
+        headers: {
+          Authorization: 'Bearer ' + access_token,
+        },
+      });
+      this.notifications = response.data.results;
       this.count = response.data.count;
       this.next = response.data.next;
       this.previous = response.data.previous;
       this.fetching = false;
-    },
-    increment() {
-      this.count++;
     },
   },
 });

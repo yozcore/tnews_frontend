@@ -13,10 +13,10 @@ export interface Thread {
   contentType: string;
   commentCount: number;
   timeSinceCreated: string;
-  user: {
-    id: string;
-    username: string;
-  };
+  body: string;
+  user: User;
+  humanized_created_at: string;
+  humanized_updated_at: string;
   community: {
     id: string;
     name: string;
@@ -39,7 +39,7 @@ export interface User {
   email: string;
   biography: string;
   bioImage: string;
-  avatar_image: string;
+  avatarImage: string;
   notificationCount: number;
   commentCount: number;
   threadCount: number;
@@ -53,4 +53,23 @@ export interface User {
   isFirstLogin: boolean;
   stopNotification: boolean;
   deactivatedAt: string;
+}
+
+export interface Community {
+  id: number;
+  name: string;
+  slug: string;
+  main_image: string;
+  explanation: string;
+  thumbnail_image: string;
+}
+
+export interface MyCommunity {
+  community: Community;
+  position: number;
+  is_followed: boolean;
+  notification_count: number;
+  created_at: string;
+  updated_at: string;
+  user: string;
 }

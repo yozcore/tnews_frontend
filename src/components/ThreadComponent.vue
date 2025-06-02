@@ -29,10 +29,22 @@
                   :href="'/' + thread.user.username"
                   @click.prevent="
                     $emit('trigger');
-                    $router.push('/' + thread.user.username);
+                    $router.push('/c/' + thread.community.slug);
                   "
                 >
-                  {{ thread.user.username }}
+                  c/{{ thread.community.name }}
+                </a>
+                &nbsp;
+                <a
+                  class="titlegreyhover"
+                  style="text-decoration: none"
+                  :href="'/' + thread.user.username"
+                  @click.prevent="
+                    $emit('trigger');
+                    $router.push('/u/' + thread.user.username);
+                  "
+                >
+                  u/{{ thread.user.username }}
                 </a>
                 &nbsp;
                 <a
@@ -45,7 +57,7 @@
                   "
                   >{{ thread.comment_count }}コメント</a
                 >
-                &nbsp;{{ thread.humanized_created_at }}&nbsp;
+                &nbsp;{{ thread.humanized_updated_at }}&nbsp;
               </small>
               <div>
                 <q-btn

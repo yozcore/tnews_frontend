@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Thread } from '../models';
+import { Thread, User } from '../models';
 import { API_URLS } from '../const';
 import axios from 'axios';
 import { title } from 'process';
@@ -7,26 +7,7 @@ import { useQuasar } from 'quasar';
 
 export const useThreadStore = defineStore('thread', {
   state: () => ({
-    thread: {
-      body: '',
-      title: '',
-      created_at: '',
-      humanized_created_at: '',
-      user: {
-        id: '',
-        username: '',
-        first_name: '',
-        last_name: '',
-        email: '',
-        avatar_image: '',
-        biography: '',
-        location: '',
-        website: '',
-        date_joined: '',
-        is_active: false,
-        is_staff: false,
-      },
-    },
+    thread: {} as Thread,
     fetching: true,
     comments: [
       {

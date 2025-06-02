@@ -43,7 +43,7 @@ module.exports = configure(function (/* ctx */) {
         node: 'node20',
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -54,7 +54,7 @@ module.exports = configure(function (/* ctx */) {
       // analyze: true,
       env: {
         // You have to manually define all the variables you want to pass in
-        API_URL: 'http://192.168.11.41:8000',
+        API_URL: 'http://127.0.0.1:8000',
         CLIENT_ID: 'GFD94fsZrCUzXAhedt4T0m9lO9JQPd3IhIe5RJip',
         // ...
       },
@@ -86,7 +86,12 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
+      host: '0.0.0.0',
+      port: 9000,
       open: true, // opens browser window automatically
+      hmr: {
+        clientPort: 9000, // use this if you have a reverse proxy in front of the dev server
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework

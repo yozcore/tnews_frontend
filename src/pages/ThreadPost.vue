@@ -1,8 +1,8 @@
 <template>
-  <q-page class="row justify-center">
+  <q-page class="row justify-start">
     <div
-      class="col-12 col-md-6 col-lg-5"
-      :class="[$q.screen.lt.md ? 'q-px-sm' : 'q-px-xl q-mx-lg']"
+      class="col-12 col-md-7 col-lg-6"
+      :class="[$q.screen.lt.md ? 'q-px-lg' : 'q-px-xl q-mx-lg']"
     >
       <div class="q-pt-md">
         <div class="text-grey">カテゴリ</div>
@@ -61,23 +61,7 @@
           label="記事"
         />
       </div>
-      <div class="q-py-md" v-if="postType == 'community'">
-        <div class="text-grey">コメント</div>
-        <q-radio
-          v-model="comment"
-          checked-icon="task_alt"
-          unchecked-icon="panorama_fish_eye"
-          val="anyone"
-          label="誰でも"
-        />
-        <q-radio
-          v-model="comment"
-          checked-icon="task_alt"
-          unchecked-icon="panorama_fish_eye"
-          val="prohibited"
-          label="コメント不可"
-        />
-      </div>
+
       <q-input
         outlined
         class="q-py-md"
@@ -87,14 +71,14 @@
         maxlength="100"
         :rules="[
           (title) =>
-            (title.length <= 100 && title.length >= 1) ||
+            (title.length <= 100 && title.length >= 0) ||
             '1文字以上100文字以内',
         ]"
         v-bind:class="[$q.dark.isActive ? 'bg-dark' : 'bg-grey-1']"
       >
       </q-input>
       <q-editor
-        class="q-my-md bg-grey-1"
+        class="q-my-md"
         v-model="body"
         min-height="5rem"
         ref="editorRef"
@@ -126,21 +110,15 @@
           v-if="title && body"
           @click="createThread()"
           color="grey"
-          dense
           class="q-mr-md"
         >
-          <small class="text-weight-bolder">下書き保存</small>
+          下書き保存
         </q-btn>
-        <q-btn
-          v-if="title && body"
-          @click="createThread()"
-          color="green-9"
-          dense
-        >
-          <small class="text-weight-bolder">投稿する</small>
+        <q-btn v-if="title && body" @click="createThread()" color="green-9">
+          投稿する
         </q-btn>
-        <q-btn v-else disable @click="createThread()" color="green-9" dense
-          ><small class="text-weight-bolder">投稿する</small>
+        <q-btn v-else disable @click="createThread()" color="green-9"
+          >投稿する
         </q-btn>
       </div>
     </div>
@@ -154,6 +132,8 @@ import { useQuasar } from 'quasar';
 import { useUserStore } from 'src/stores/user';
 import { API_URLS } from '../const';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const userStore = useUserStore();
 const $q = useQuasar();
@@ -241,6 +221,7 @@ async function createThread() {
         },
       }
     );
+    router.push('/');
   } catch (error) {
     console.error(error);
   }

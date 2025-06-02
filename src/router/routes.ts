@@ -27,7 +27,13 @@ const routes: RouteRecordRaw[] = [
         meta: { isPublic: true },
       },
       {
-        path: '/:id?',
+        path: '/c/:slug?',
+        name: 'community',
+        component: () => import('pages/IndexPage.vue'),
+        meta: { isPublic: true },
+      },
+      {
+        path: '/u/:username?',
         name: 'user',
         component: () => import('pages/IndexPage.vue'),
         meta: { isPublic: true },

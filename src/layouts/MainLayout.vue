@@ -1,13 +1,13 @@
 <template>
   <q-layout
-    view="hHh lpR fFf"
+    view="hHh Lpr lFf"
     v-bind:class="[$q.dark.isActive ? 'bg-dark' : 'bg-grey-1']"
   >
     <q-header
       class="q-px-lg"
-      elevated
+      bordered
       v-bind:class="[
-        $q.dark.isActive ? 'bg-dark text-white' : 'bg-white text-black',
+        $q.dark.isActive ? 'bg-dark text-white' : 'bg-white  text-black',
       ]"
     >
       <q-toolbar>
@@ -24,6 +24,7 @@
             </q-item-section>
           </q-item>
         </q-toolbar-title>
+        <q-btn @click="toggleSideBar"> t </q-btn>
         <div>
           <q-btn
             class="text-weight-bolder"
@@ -52,6 +53,9 @@
         <q-btn icon="las la-bell" flat dense class="q-mx-xs">
           <q-tooltip> 通知 </q-tooltip>
           <small class="q-px-xs">通知</small>
+          <div v-if="isLoggedIn && notificationCount >= 0">
+            通知{{ notificationCount }}件
+          </div>
         </q-btn>
         <div v-if="isLoggedIn" class="row">
           <q-img
@@ -99,65 +103,73 @@
       </q-toolbar>
     </q-header>
 
-    <!--  <q-drawer
+    <q-drawer
       show-if-above
       v-model="leftDrawerOpen"
       side="left"
       bordered
-      :width="250"
+      :overlay="false"
+      :width="220"
       :breakpoint="500"
     >
       <q-scroll-area class="fit">
-        <q-list padding>
-          <q-item clickable dense>
-            <q-item-section avatar>
-              <q-icon color="grey" name="las la-home" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label
-                ><span class="text-weight-bold text-caption"
-                  >今日のトレンド</span
-                ></q-item-label
-              >
-            </q-item-section>
-          </q-item>
-          <q-item clickable dense>
-            <q-item-section avatar>
-              <q-icon color="grey" name="las la-plug" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label
-                ><span class="text-weight-bold text-caption"
-                  >API</span
-                ></q-item-label
-              >
-            </q-item-section>
-          </q-item>
-          <q-separator spaced />
+        <!-- <q-list padding v-if="myCommunities && myCommunities.length > 0">
           <q-item-label header>コミュニティ</q-item-label>
-
-          <q-item>
-            <q-item-section avatar>
-              <q-icon color="primary" name="bluetooth" />
-            </q-item-section>
-            <q-item-section>List item</q-item-section>
-            <q-item-section side>
-              <q-item-label caption>meta</q-item-label>
-            </q-item-section>
-          </q-item>
+          <div
+            v-for="community in myCommunities"
+            v-bind:key="community.community.id"
+          >
+            <q-item
+              clickable
+              @click.prevent="
+                $emit('trigger');
+                $router.push('/c/' + community.community.slug);
+              "
+            >
+              <q-item-section avatar>
+                <q-icon color="primary" name="bluetooth" />
+              </q-item-section>
+              <q-item-section>{{ community.community.name }}</q-item-section>
+            </q-item>
+          </div>
         </q-list>
+        <div
+          v-else-if="myCommunities && myCommunities.length === 0"
+          class="q-pa-md text-grey"
+        >
+          参加中のコミュニティはありません
+        </div> -->
       </q-scroll-area>
-    </q-drawer> -->
+    </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
+    <!-- place QPageScroller at end of page -->
+    <q-page-scroller position="top" :scroll-offset="20" :offset="[0, 18]">
+      <q-btn
+        fab
+        dense
+        round
+        icon="keyboard_arrow_up"
+        size="md"
+      /> </q-page-scroller
+    ><q-page-scroller
+      reverse
+      position="bottom"
+      :scroll-offset="20"
+      :offset="[0, 18]"
+    >
+      <q-btn fab dense round icon="keyboard_arrow_down" size="md" />
+    </q-page-scroller>
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, watch, computed } from 'vue';
 import { useUserStore } from 'src/stores/user';
+
+import { useNotificationsStore } from 'src/stores/notifications';
 import { LocalStorage, useQuasar } from 'quasar';
 
 const $q = useQuasar();
@@ -165,10 +177,22 @@ const dark = LocalStorage.getItem('is_dark');
 $q.dark.set(dark as boolean);
 
 const userStore = useUserStore();
+
+const notificationsStore = useNotificationsStore();
 const isLoggedIn = computed(() => userStore.is_logged_in);
-const avatarImage = computed(() => userStore.profile?.avatar_image);
+const avatarImage = computed(() => userStore.profile?.avatarImage);
 const userName = computed(() => userStore.profile?.username);
+const notificationCount = computed(() => userStore.profile?.notificationCount);
+const myCommunities = computed(() => userStore.my_communities);
+const myCommunitiesFetching = computed(() => userStore.my_communities_fetching);
+
 const fetchUserInfo = () => userStore.fetchUserInfo();
+const fetchNotifications = () => notificationsStore.fetchNotifications();
+const fetchMyCommunities = () => userStore.fetchMyCommunities();
+const leftDrawerOpen = ref(true);
+function toggleSideBar() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
 
 function changeTheme() {
   if ($q.dark.isActive) {
@@ -185,7 +209,7 @@ function logout() {
   $q.notify({
     message: 'ログアウトしました',
     color: 'green',
-    position: 'top',
+    position: 'bottom',
     timeout: 2000,
   });
 }
@@ -193,6 +217,7 @@ function logout() {
 onMounted(() => {
   if (userStore.is_logged_in) {
     fetchUserInfo();
+    fetchMyCommunities();
   }
 });
 

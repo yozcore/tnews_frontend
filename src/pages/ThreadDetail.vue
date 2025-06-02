@@ -1,8 +1,8 @@
 <template>
-  <q-page class="row justify-center">
+  <q-page class="row justify-start">
     <div
-      class="col-12 col-md-6 col-lg-5"
-      :class="[$q.screen.lt.md ? 'q-px-sm' : 'q-px-xl q-mx-lg']"
+      class="col-12 col-md-7 col-lg-6"
+      :class="[$q.screen.lt.md ? 'q-px-lg' : 'q-px-xl q-mx-lg']"
     >
       <div v-if="fetching">
         <div class="row justify-center q-my-lg">
@@ -12,7 +12,29 @@
       <div v-else>
         <div class="text-h4 q-mb-md q-mt-xl">{{ thread.title }}</div>
         <div class="text-grey q-mb-md">
-          {{ thread.humanized_created_at }} {{ thread.user.username }}
+          {{ thread.humanized_created_at }}
+          <a
+            class="titlegreyhover"
+            style="text-decoration: none"
+            :href="'/' + thread.user.username"
+            @click.prevent="
+              $emit('trigger');
+              $router.push('/c/' + thread.community.slug);
+            "
+          >
+            c/{{ thread.community.name }}
+          </a>
+          <a
+            class="titlegreyhover"
+            style="text-decoration: none"
+            :href="'/' + thread.user.username"
+            @click.prevent="
+              $emit('trigger');
+              $router.push('/u/' + thread.user.username);
+            "
+          >
+            u/{{ thread.user.username }}
+          </a>
         </div>
         <div v-html="thread.body" class="text-body1 q-mb-lg"></div>
       </div>
@@ -39,7 +61,7 @@
 
             <div style="width: 90%" class="q-pl-sm">
               <div class="q-mb-xs">{{ comment.user.username }}</div>
-              <div class="text-body1 q-mb-sm">
+              <div class="text-body1 q-mb-sm" style="white-space: pre-wrap">
                 {{ comment.body }}
               </div>
               <div class="row justify-between q-mb-sm">
@@ -122,28 +144,15 @@
         :rows="5"
         class="q-mb-md"
       />
-      <div v-if="isLoggedIn">
+      <div v-if="isLoggedIn" class="float-right">
         <q-btn
-          class="q-mt-md"
+          class="q-my-md"
           label="投稿"
           color="green-9"
           @click="postComment"
         />
       </div>
       <div v-else>
-        <div class="q-mt-md" style="width: 250px">
-          <div class="text-weight-bold">ユーザー名</div>
-          <q-input outlined v-model="username" lazy-rules dense />
-          <div class="q-mt-sm text-weight-bold">パスワード</div>
-          <q-input
-            outlined
-            type="password"
-            v-model="password"
-            lazy-rules
-            dense
-          />
-        </div>
-
         <q-btn
           class="q-mt-md"
           label="ログインして投稿"
@@ -185,7 +194,7 @@ import { useRoute } from 'vue-router';
 import { onMounted, computed } from 'vue';
 import { useThreadStore } from 'stores/thread';
 import { useUserStore } from 'src/stores/user';
-import { is, useQuasar } from 'quasar';
+import { useQuasar } from 'quasar';
 import { ref } from 'vue';
 const $q = useQuasar();
 const route = useRoute();
