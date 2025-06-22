@@ -24,21 +24,7 @@
             </q-item-section>
           </q-item>
         </q-toolbar-title>
-        <q-btn @click="toggleSideBar"> t </q-btn>
-        <div>
-          <q-btn
-            class="text-weight-bolder"
-            style="top: 35px"
-            v-bind:label="
-              $q.dark.isActive ? 'ダークモード:ON' : 'ダークモード:OFF'
-            "
-            dense
-            flat
-            no-caps
-            size="11px"
-            @click="changeTheme()"
-          />
-        </div>
+        <q-btn @click="toggleSideBar"> サイドバー </q-btn>
 
         <q-btn
           icon="las la-plus-circle"
@@ -47,15 +33,37 @@
           class="q-mx-xs"
           @click="$router.push('/post')"
         >
-          <q-tooltip> 投稿 </q-tooltip>
           <small class="q-px-xs">投稿</small>
         </q-btn>
-        <q-btn icon="las la-bell" flat dense class="q-mx-xs">
-          <q-tooltip> 通知 </q-tooltip>
-          <small class="q-px-xs">通知</small>
-          <div v-if="isLoggedIn && notificationCount >= 0">
-            通知{{ notificationCount }}件
+
+        <q-btn
+          icon="las la-bell"
+          flat
+          dense
+          class="q-mx-xs"
+          @click="fetchNotifications"
+        >
+          <div v-if="isLoggedIn && notificationCount >= 1">
+            <q-badge floating rounded color="green">
+              {{ notificationCount }}
+            </q-badge>
           </div>
+          <q-menu>
+            <q-list
+              style="min-width: 100px"
+              v-for="notification in notifications"
+              v-bind:key="notification.created_at"
+            >
+              <q-item clickable v-close-popup>
+                <q-item-section> {{ notification.verb }}</q-item-section>
+                <q-item-section side>
+                  <q-item-label caption>{{
+                    notification.humanized_created_at
+                  }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
         </q-btn>
         <div v-if="isLoggedIn" class="row">
           <q-img
@@ -100,6 +108,19 @@
         <q-btn flat to="/auth/login" class="text-weight-bolder" v-else>
           ログイン
         </q-btn>
+        <div style="top: 48px; position: absolute; right: 0">
+          <q-btn
+            class="text-weight-bolder"
+            v-bind:label="
+              $q.dark.isActive ? 'ダークモード:ON' : 'ダークモード:OFF'
+            "
+            dense
+            flat
+            no-caps
+            size="11px"
+            @click="changeTheme()"
+          />
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -113,7 +134,7 @@
       :breakpoint="500"
     >
       <q-scroll-area class="fit">
-        <!-- <q-list padding v-if="myCommunities && myCommunities.length > 0">
+        <q-list padding v-if="myCommunitiesFetching && isLoggedIn">
           <q-item-label header>コミュニティ</q-item-label>
           <div
             v-for="community in myCommunities"
@@ -127,18 +148,31 @@
               "
             >
               <q-item-section avatar>
-                <q-icon color="primary" name="bluetooth" />
+                <q-img
+                  :src="community.community.thumbnail_image"
+                  style="
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    align-self: flex-start;
+                  "
+                >
+                </q-img>
               </q-item-section>
-              <q-item-section>{{ community.community.name }}</q-item-section>
+              <q-item-section>
+                <q-item-label>{{ community.community.name }}</q-item-label>
+
+                <q-item-label caption>{{
+                  community.humanized_updated_at
+                }}</q-item-label>
+              </q-item-section>
             </q-item>
           </div>
         </q-list>
-        <div
-          v-else-if="myCommunities && myCommunities.length === 0"
-          class="q-pa-md text-grey"
-        >
+        <div v-else class="q-pa-md text-grey">
           参加中のコミュニティはありません
-        </div> -->
+        </div>
       </q-scroll-area>
     </q-drawer>
 
@@ -180,9 +214,10 @@ const userStore = useUserStore();
 
 const notificationsStore = useNotificationsStore();
 const isLoggedIn = computed(() => userStore.is_logged_in);
-const avatarImage = computed(() => userStore.profile?.avatarImage);
+const avatarImage = computed(() => userStore.profile?.avatar_image);
 const userName = computed(() => userStore.profile?.username);
-const notificationCount = computed(() => userStore.profile?.notificationCount);
+const notificationCount = computed(() => userStore.profile?.notification_count);
+const notifications = computed(() => notificationsStore.notifications);
 const myCommunities = computed(() => userStore.my_communities);
 const myCommunitiesFetching = computed(() => userStore.my_communities_fetching);
 

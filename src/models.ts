@@ -40,7 +40,8 @@ export interface User {
   biography: string;
   bioImage: string;
   avatarImage: string;
-  notificationCount: number;
+  avatar_image: string;
+  notification_count: number;
   commentCount: number;
   threadCount: number;
   communityCount: number;
@@ -62,6 +63,7 @@ export interface Community {
   main_image: string;
   explanation: string;
   thumbnail_image: string;
+  humanized_updated_at: string;
 }
 
 export interface MyCommunity {
@@ -72,4 +74,11 @@ export interface MyCommunity {
   created_at: string;
   updated_at: string;
   user: string;
+  humanized_updated_at: string;
+}
+
+export interface Notification {
+  created_at: string;
+  humanized_created_at: string;
+  verb: string;
 }

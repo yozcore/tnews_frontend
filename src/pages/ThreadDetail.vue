@@ -16,13 +16,13 @@
           <a
             class="titlegreyhover"
             style="text-decoration: none"
-            :href="'/' + thread.user.username"
+            :href="'/c/' + thread.community.slug"
             @click.prevent="
               $emit('trigger');
               $router.push('/c/' + thread.community.slug);
             "
           >
-            c/{{ thread.community.name }}
+            c/{{ thread.community.slug }}
           </a>
           <a
             class="titlegreyhover"
@@ -38,10 +38,8 @@
         </div>
         <div v-html="thread.body" class="text-body1 q-mb-lg"></div>
       </div>
-      <div v-if="commentFetching">
-        <div class="row justify-center q-my-lg">
-          <q-spinner-orbit color="primary" size="3em" />
-        </div>
+      <div v-if="commentFetching || fetching">
+        <div class="row justify-center q-my-lg"></div>
       </div>
       <div v-else style="width: 100%">
         <div v-for="comment in comments" :key="comment.id" class="q-mb-md">
@@ -136,29 +134,31 @@
       </div>
       <q-separator class="q-my-md" />
       <div class="text-weight-bold">コメント</div>
-      <q-input
-        v-model="comment"
-        outlined
-        type="textarea"
-        color="blue-12"
-        :rows="5"
-        class="q-mb-md"
-      />
-      <div v-if="isLoggedIn" class="float-right">
-        <q-btn
-          class="q-my-md"
-          label="投稿"
-          color="green-9"
-          @click="postComment"
+      <div v-if="isLoggedIn">
+        <q-input
+          v-model="comment"
+          outlined
+          type="textarea"
+          color="blue-12"
+          :rows="5"
+          class="q-mb-md"
         />
+        <div class="float-right">
+          <q-btn
+            class="q-my-md"
+            label="投稿"
+            color="green-9"
+            @click="postComment"
+          />
+        </div>
       </div>
       <div v-else>
-        <q-btn
-          class="q-mt-md"
-          label="ログインして投稿"
-          color="green-9"
-          @click="postComment"
-        />
+        <div class="text-weight-bold text-grey">
+          ログインしていないため、コメントは投稿できません
+        </div>
+        <div class="text-weight-bold text-grey">
+          コメントを投稿するにはログインしてください
+        </div>
       </div>
 
       <div class="q-my-xl"></div>

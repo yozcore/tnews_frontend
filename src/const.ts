@@ -11,5 +11,6 @@ export const API_URLS = {
   USERS: `${API_BASE_URL}/${version}/users/`,
   THREADS: `${API_BASE_URL}/${version}/threads/`,
   COMMENTS: `${API_BASE_URL}/${version}/comments/`,
+  COMMUNITIES: `${API_BASE_URL}/${version}/communities/`,
   ME: `${API_BASE_URL}/${version}/me/`,
 };

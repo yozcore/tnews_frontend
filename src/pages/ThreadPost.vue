@@ -4,69 +4,17 @@
       class="col-12 col-md-7 col-lg-6"
       :class="[$q.screen.lt.md ? 'q-px-lg' : 'q-px-xl q-mx-lg']"
     >
-      <div class="q-pt-md">
-        <div class="text-grey">カテゴリ</div>
-        <q-radio
-          v-model="postType"
-          checked-icon="task_alt"
-          unchecked-icon="panorama_fish_eye"
-          val="community"
-          label="ニュース"
-        />
-        <q-radio
-          v-model="postType"
-          checked-icon="task_alt"
-          unchecked-icon="panorama_fish_eye"
-          val="meme"
-          label="ミーム"
-        />
-        <q-radio
-          v-model="postType"
-          checked-icon="task_alt"
-          unchecked-icon="panorama_fish_eye"
-          val="til"
-          label="TIL"
-        />
-        <q-radio
-          v-model="postType"
-          checked-icon="task_alt"
-          unchecked-icon="panorama_fish_eye"
-          val="product"
-          label="プロダクト"
-        />
-
-        <q-radio
-          v-model="postType"
-          checked-icon="task_alt"
-          unchecked-icon="panorama_fish_eye"
-          val="soliloquy"
-          label="独り言"
-        />
-      </div>
-
-      <div class="q-pt-md" v-if="postType == 'community'">
-        <div class="text-grey">形式</div>
-        <q-radio
-          v-model="postFormat"
-          checked-icon="task_alt"
-          unchecked-icon="panorama_fish_eye"
-          val="link"
-          label="リンク"
-        />
-        <q-radio
-          v-model="postFormat"
-          checked-icon="task_alt"
-          unchecked-icon="panorama_fish_eye"
-          val="article"
-          label="記事"
-        />
-      </div>
-
+      <q-select
+        outlined
+        class="q-mt-lg"
+        v-model="selected"
+        :options="options"
+        label="コミュニティを選択"
+      />
       <q-input
         outlined
         class="q-py-md"
         v-model="title"
-        dense
         label="タイトル"
         maxlength="100"
         :rules="[
@@ -80,7 +28,7 @@
       <q-editor
         class="q-my-md"
         v-model="body"
-        min-height="5rem"
+        min-height="10rem"
         ref="editorRef"
         :definitions="{
           upload: {
@@ -138,12 +86,16 @@ const router = useRouter();
 const userStore = useUserStore();
 const $q = useQuasar();
 const editorRef = ref<any>(null);
+const selected = ref<any>(null);
+const options = [
+  { id: 174821565907400, label: 'test', color: 'blue' },
+  { id: 174836859161901, label: 'python', color: 'orange' },
+];
+
 defineOptions({
   name: 'ThreadPost',
 });
-const postType = ref('community');
-const postFormat = ref('link');
-const comment = ref('anyone');
+
 const title = ref('');
 const body = ref('');
 
@@ -214,6 +166,7 @@ async function createThread() {
       {
         body: modifiedBody,
         title: modifiedTitle,
+        community: selected.value ? selected.value.id : null,
       },
       {
         headers: {

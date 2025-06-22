@@ -1,6 +1,8 @@
-# Quasar App (sb-web-quasar)
+###　開発環境の起動
 
-A Quasar Project
+```bash
+quasar dev
+```
 
 ## パッケージインストール
 
@@ -13,12 +15,6 @@ yarn install
 node,yarn,quasar
 
 yarn の PATH 通すのを忘れずに
-
-###　開発環境の起動
-
-```bash
-quasar dev
-```
 
 ssr モード
 

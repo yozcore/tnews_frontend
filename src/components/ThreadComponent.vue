@@ -25,20 +25,21 @@
               <small class="text-grey">
                 <a
                   class="titlegreyhover"
+                  v-if="thread.community"
                   style="text-decoration: none"
-                  :href="'/' + thread.user.username"
+                  :href="'/c/' + thread.community.slug"
                   @click.prevent="
                     $emit('trigger');
                     $router.push('/c/' + thread.community.slug);
                   "
                 >
-                  c/{{ thread.community.name }}
+                  c/{{ thread.community.slug }}
                 </a>
                 &nbsp;
                 <a
                   class="titlegreyhover"
                   style="text-decoration: none"
-                  :href="'/' + thread.user.username"
+                  :href="'/u/' + thread.user.username"
                   @click.prevent="
                     $emit('trigger');
                     $router.push('/u/' + thread.user.username);

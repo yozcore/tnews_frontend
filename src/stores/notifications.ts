@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
 import { API_URLS } from '../const';
 import { useUserStore } from './user';
+import { Notification } from '../models';
 import axios from 'axios';
 
 export const useNotificationsStore = defineStore('notifications', {
   state: () => ({
-    notifications: [{}],
+    notifications: [{}] as Notification[],
     count: 0,
     next: null,
     previous: null,
@@ -22,7 +23,7 @@ export const useNotificationsStore = defineStore('notifications', {
       this.fetching = true;
       const userStore = useUserStore();
       const access_token = userStore.access_token;
-      const response = await axios.get(API_URLS.ME + 'notifications', {
+      const response = await axios.get(API_URLS.ME + 'notifications/', {
         headers: {
           Authorization: 'Bearer ' + access_token,
         },

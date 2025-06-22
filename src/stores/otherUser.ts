@@ -1,23 +1,17 @@
 import { defineStore } from 'pinia';
-import { User, MyCommunity } from '../models';
+import { User } from '../models';
 import { API_URLS } from '../const';
 import axios from 'axios';
 
-export const useUserStore = defineStore('user', {
+export const useOtherUserStore = defineStore('otherUser', {
   state: () => ({
     access_token: '',
     refresh_token: '',
     fetching: true,
     is_logged_in: false,
     profile: { avatar_image: '', username: '', notification_count: 0 },
-    updated_threads_is_unread: true,
-    my_communities: [{}] as MyCommunity[],
-    my_communities_count: 0,
-    my_communities_next: null,
-    my_communities_previous: null,
-    my_communities_fetching: true,
   }),
-  persist: true,
+  persist: false,
 
   getters: {},
 
@@ -31,9 +25,6 @@ export const useUserStore = defineStore('user', {
 
     setIsLoggedIn(isLoggedIn: boolean) {
       this.is_logged_in = isLoggedIn;
-    },
-    setUpdatedThreadsIsUnread(isUnread: boolean) {
-      this.updated_threads_is_unread = isUnread;
     },
     setProfile(profile: User) {
       this.profile = profile;
@@ -50,19 +41,6 @@ export const useUserStore = defineStore('user', {
 
       this.profile = response.data;
       this.fetching = false;
-    },
-
-    async fetchMyCommunities() {
-      this.my_communities_fetching = true;
-      const response = await axios.get(API_URLS.ME + 'communities/', {
-        headers: {
-          Authorization: 'Bearer ' + this.access_token,
-        },
-      });
-      this.my_communities = response.data.results;
-      this.my_communities_count = response.data.count;
-      this.my_communities_next = response.data.next;
-      this.my_communities_previous = response.data.previous;
     },
 
     async login(username: string, password: string) {
